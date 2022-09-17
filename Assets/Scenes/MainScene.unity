@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &7187490
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -201,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 7187489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.29, y: 0.29, z: 0.29}
+  m_LocalScale: {x: 0.26, y: 0.26, z: 0.26}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -509,6 +509,8 @@ MonoBehaviour:
   audioSourceSE: {fileID: 1017284352}
   audioClipRod: {fileID: 8300000, guid: fbb4f7ccfb9ca4f70a7b9ce9fc5ac744, type: 3}
   throwRod: 0
+  hotate: {fileID: 7187489}
+  fish: {fileID: 1572496235}
 --- !u!82 &1017284352
 AudioSource:
   m_ObjectHideFlags: 0
@@ -789,7 +791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1444536463
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -873,7 +875,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1572496236
 SpriteRenderer:
   m_ObjectHideFlags: 0
