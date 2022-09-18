@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Timers;
 
 public class SceneManager : MonoBehaviour
 {
@@ -9,59 +10,99 @@ public class SceneManager : MonoBehaviour
     public AudioSource audioSourceSE;
     public AudioClip audioClipRod;
 
-    public bool throwRod = false; //竿を投げたかどうか
+    //竿を投げたかどうか
+    public bool throwRod = false; 
+
+    //釣果を保存する辞書
+    Dictionary<int,GameObject> fishes;
+
+    //釣果の出る確率を保存する辞書
+    Dictionary<int, float> fishesProb;
 
     //釣果
-    public GameObject hotate;
-    public GameObject fish;
+    public GameObject hotate; //ホタテ
+    public GameObject fish; //普通の魚
 
     private void Update()
     {
-        //画面をタップした時
+        //画面をタップした時竿を投げる
         if (Input.GetMouseButtonDown(0) && throwRod == false)
         {
-            ThrowRod();
+            rod.SetActive(true);
+            tapText.SetActive(false);
+            audioSourceSE.PlayOneShot(audioClipRod);
+            throwRod = true;
+            StartCoroutine("ThrowRod");
         }
     }
 
-    void ThrowRod()
+    private IEnumerator ThrowRod()
     {
-        rod.SetActive(true);
-        tapText.SetActive(false);
-        audioSourceSE.PlayOneShot(audioClipRod);
-        throwRod = true;
-        HitFishes();
-    }
+        InitializeDicts();
 
-    void HitFishes()
-    {
-        int hitFish = 0;
-        int hitHotate = 1;
-        int num = Random.Range(0, 100);
-        Debug.Log(num);
-        
-
-        while (num != hitFish && num != hitHotate)
+        int fishesId = Choose();
+        Debug.Log(fishesId);
+        while (true)
         {
-            num = Random.Range(0, 100);
-            Debug.Log(num);
-            if (num == hitFish)
+            if (fishesId != 0)
             {
-                Catch(hitFish);
+                Catch(fishesId);
                 break;
             }
-            else if (num == hitHotate)
-            {
-                Catch(hitHotate);
-                break;
-            }
+
+            yield return new WaitForSeconds(1.0f); //１秒毎に抽選
+            fishesId = Choose();
+            Debug.Log(fishesId);
         }
-        
     }
 
     void Catch(int hitNum)
     {
-        List<GameObject> fishes = new List<GameObject>() { hotate, fish };
         fishes[hitNum].SetActive(true);
+    }
+
+    void InitializeDicts()
+    {
+        fishes = new Dictionary<int, GameObject>();
+        fishes.Add(0, null);
+        fishes.Add(1, fish);
+        fishes.Add(2, hotate);
+
+        fishesProb = new Dictionary<int, float>();
+        fishesProb.Add(0, 900.0f);
+        fishesProb.Add(1, 55.0f);
+        fishesProb.Add(2, 45.0f);
+    }
+
+    int Choose() //抽選
+    {
+        //確率の合計値を収納」
+        float total = 0;
+        
+        //釣果の確率用辞書からドロップ率を合計
+        foreach(KeyValuePair<int,float> elem in fishesProb)
+        {
+            total += elem.Value;
+        }
+
+        // Random.valueでは0から1までのfloat値を返すので
+        // そこにドロップ率の合計を掛ける
+        float randomPoint = Random.value * total;
+
+        // randomPointの位置に該当するキーを返す
+        foreach(KeyValuePair<int,float> elem in fishesProb)
+        {
+            if(randomPoint < elem.Value)
+            {
+                return elem.Key;
+            }
+            else
+            {
+                randomPoint -= elem.Value;
+            }
+        }
+
+        // Random.valueで1.0fも含まれるため
+        return 0;
     }
 }
