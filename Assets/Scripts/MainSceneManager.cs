@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SceneManager : MonoBehaviour
+public class MainSceneManager : MonoBehaviour
 {
     public GameObject tapText;
     public GameObject rod;
@@ -10,17 +11,17 @@ public class SceneManager : MonoBehaviour
     public AudioClip audioClipRod;
 
     //竿を投げたかどうか
-    public bool throwRod = false; 
+    public bool throwRod = false;
 
     //釣果を保存する辞書
-    Dictionary<int,GameObject> fishes;
+    Dictionary<int, string> fishes;
 
     //釣果の出る確率を保存する辞書
     Dictionary<int, float> fishesProb;
 
-    //釣果
-    public GameObject hotate; //ホタテ
-    public GameObject fish; //普通の魚
+    ////釣果
+    //public GameObject hotate; //ホタテ
+    //public GameObject fish; //普通の魚
 
     private void Update()
     {
@@ -57,15 +58,16 @@ public class SceneManager : MonoBehaviour
 
     void Catch(int hitNum)
     {
-        fishes[hitNum].SetActive(true);
+        GameObject prefab = (GameObject)Resources.Load("Prefabs/Catch/" + fishes[hitNum]);
+        Instantiate(prefab, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
     }
 
     void InitializeDicts()
     {
-        fishes = new Dictionary<int, GameObject>();
+        fishes = new Dictionary<int, string>();
         fishes.Add(0, null);
-        fishes.Add(1, fish);
-        fishes.Add(2, hotate);
+        fishes.Add(1, "fish");
+        fishes.Add(2, "hotate");
 
         fishesProb = new Dictionary<int, float>();
         fishesProb.Add(0, 900.0f);
