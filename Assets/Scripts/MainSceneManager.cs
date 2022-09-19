@@ -13,15 +13,11 @@ public class MainSceneManager : MonoBehaviour
     //竿を投げたかどうか
     public bool throwRod = false;
 
-    //釣果を保存する辞書
+    //釣果の名前を保存する辞書
     Dictionary<int, string> fishes;
 
     //釣果の出る確率を保存する辞書
     Dictionary<int, float> fishesProb;
-
-    ////釣果
-    //public GameObject hotate; //ホタテ
-    //public GameObject fish; //普通の魚
 
     private void Update()
     {
@@ -59,7 +55,7 @@ public class MainSceneManager : MonoBehaviour
     void Catch(int hitNum)
     {
         GameObject prefab = (GameObject)Resources.Load("Prefabs/Catch/" + fishes[hitNum]);
-        Instantiate(prefab, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+        Instantiate(prefab, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity); //辞書からhitNumに対応したプレハブを生成する
     }
 
     void InitializeDicts()
