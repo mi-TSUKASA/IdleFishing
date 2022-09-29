@@ -7,6 +7,7 @@ public class MainSceneManager : MonoBehaviour
 {
     public GameObject tapText;
     public GameObject rod;
+    public float nowPosi; //竿の位置
     public AudioSource audioSourceSE;
     public AudioClip audioClipRod;
 
@@ -19,8 +20,12 @@ public class MainSceneManager : MonoBehaviour
     //釣果の出る確率を保存する辞書
     Dictionary<int, float> fishesProb;
 
+    int fishesId; //当たった魚の判別用の値
+
     private void Update()
     {
+        nowPosi = rod.transform.position.y; //竿のy位置を取得
+
         //画面をタップした時竿を投げる
         if (Input.GetMouseButtonDown(0) && throwRod == false)
         {
@@ -30,19 +35,34 @@ public class MainSceneManager : MonoBehaviour
             throwRod = true;
             StartCoroutine("ThrowRod");
         }
+
+        if (Input.GetMouseButtonDown(0) && fishesId != 0)
+        {
+            Debug.Log("tap");
+            Debug.Log(nowPosi);
+            if (nowPosi == -0.4f)
+            {
+                nowPosi = -0.5f;
+            }
+            else
+            {
+                nowPosi = -0.4f;
+            }
+            rod.transform.position = new Vector3(rod.transform.position.x, nowPosi , rod.transform.position.z);
+        }
+
     }
 
     private IEnumerator ThrowRod()
     {
         InitializeDicts();
 
-        int fishesId = Choose();
+        fishesId = Choose();
         Debug.Log(fishesId);
         while (true)
         {
             if (fishesId != 0)
             {
-                Catch(fishesId);
                 break;
             }
 
