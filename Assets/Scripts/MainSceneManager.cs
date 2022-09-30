@@ -28,9 +28,14 @@ public class MainSceneManager : MonoBehaviour
 
     public int tapCount; //タップした回数
 
-    private void Update()
+    private void Start()
     {
         nowPosi = rod.transform.position.y; //竿のy位置を取得
+    }
+
+    private void Update()
+    {
+        rod.transform.position = new Vector3(rod.transform.position.x, nowPosi, rod.transform.position.z); //竿の位置をnowPosiに合わせる
 
         //画面をタップした時竿を投げる処理
         if (Input.GetMouseButtonDown(0) && throwRod == false)
@@ -51,7 +56,6 @@ public class MainSceneManager : MonoBehaviour
                 canCatch = false;
                 fishesId = 0;
                 nowPosi = -0.4f;
-                rod.transform.position = new Vector3(rod.transform.position.x, nowPosi, rod.transform.position.z);
             }
         }
 
@@ -69,7 +73,6 @@ public class MainSceneManager : MonoBehaviour
             {
                 nowPosi = -0.4f;
             }
-            rod.transform.position = new Vector3(rod.transform.position.x, nowPosi , rod.transform.position.z);
         }
 
         if (canCatch == true && tapCount == 10)
