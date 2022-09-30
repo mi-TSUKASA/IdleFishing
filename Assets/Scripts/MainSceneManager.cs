@@ -20,13 +20,19 @@ public class MainSceneManager : MonoBehaviour
     //釣果の出る確率を保存する辞書
     Dictionary<int, float> fishesProb;
 
-    int fishesId; //当たった魚の判別用の値
+    public int fishesId; //当たった魚の判別用の値（0はハズレ）
+
+    public float timer = 0; //ヒットしてから10秒計測するタイマー
+
+    public bool canCatch = false; //ゲットできるかどうか判定
+
+    public int tapCount; //タップした回数
 
     private void Update()
     {
         nowPosi = rod.transform.position.y; //竿のy位置を取得
 
-        //画面をタップした時竿を投げる
+        //画面をタップした時竿を投げる処理
         if (Input.GetMouseButtonDown(0) && throwRod == false)
         {
             rod.SetActive(true);
@@ -36,10 +42,25 @@ public class MainSceneManager : MonoBehaviour
             StartCoroutine("ThrowRod");
         }
 
-        if (Input.GetMouseButtonDown(0) && fishesId != 0)
+        if(fishesId != 0)
+        { 
+            timer += Time.deltaTime;
+            canCatch = true;
+            if (timer > 5)
+            {
+                canCatch = false;
+                fishesId = 0;
+                nowPosi = -0.4f;
+                rod.transform.position = new Vector3(rod.transform.position.x, nowPosi, rod.transform.position.z);
+            }
+        }
+
+        //画面をタップした時、竿が上下に振動する処理
+        if (Input.GetMouseButtonDown(0) && canCatch == true)
         {
             Debug.Log("tap");
             Debug.Log(nowPosi);
+            tapCount++;
             if (nowPosi == -0.4f)
             {
                 nowPosi = -0.5f;
@@ -50,6 +71,14 @@ public class MainSceneManager : MonoBehaviour
             }
             rod.transform.position = new Vector3(rod.transform.position.x, nowPosi , rod.transform.position.z);
         }
+
+        if (canCatch == true && tapCount == 10)
+        {
+            Catch(fishesId);
+            canCatch = false;
+            fishesId = 0;
+        }
+
 
     }
 
