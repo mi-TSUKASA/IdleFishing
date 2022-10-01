@@ -51,11 +51,11 @@ public class MainSceneManager : MonoBehaviour
         { 
             timer += Time.deltaTime;
             canCatch = true;
-            if (timer > 5)
+            if (timer > 5) //制限時間を超えると失敗
             {
                 canCatch = false;
                 fishesId = 0;
-                nowPosi = -0.4f;
+                nowPosi = 1.0f;
             }
         }
 
@@ -75,6 +75,7 @@ public class MainSceneManager : MonoBehaviour
             }
         }
 
+        //制限時間以内に画面を10タップしたらゲット
         if (canCatch == true && tapCount == 10)
         {
             Catch(fishesId);
