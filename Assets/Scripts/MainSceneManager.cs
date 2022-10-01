@@ -15,12 +15,12 @@ public class MainSceneManager : MonoBehaviour
     public bool throwRod = false;
 
     //釣果の名前を保存する辞書
-    Dictionary<int, string> fishes;
+    public static Dictionary<int, string> fishes;
 
     //釣果の出る確率を保存する辞書
     Dictionary<int, float> fishesProb;
 
-    public int fishesId; //当たった魚の判別用の値（0はハズレ）
+    public static int fishesId; //当たった魚の判別用の値（0はハズレ）
 
     public float timer = 0; //ヒットしてから10秒計測するタイマー
 
@@ -31,6 +31,8 @@ public class MainSceneManager : MonoBehaviour
     private void Start()
     {
         nowPosi = rod.transform.position.y; //竿のy位置を取得
+        fishesId = 0; //初期化
+        canCatch = false; //初期化
     }
 
     private void Update()
@@ -62,8 +64,6 @@ public class MainSceneManager : MonoBehaviour
         //画面をタップした時、竿が上下に振動する処理
         if (Input.GetMouseButtonDown(0) && canCatch == true)
         {
-            Debug.Log("tap");
-            Debug.Log(nowPosi);
             tapCount++;
             if (nowPosi == -0.4f)
             {
@@ -78,9 +78,7 @@ public class MainSceneManager : MonoBehaviour
         //制限時間以内に画面を10タップしたらゲット
         if (canCatch == true && tapCount == 10)
         {
-            Catch(fishesId);
-            canCatch = false;
-            fishesId = 0;
+            SceneManager.LoadScene("GetScene");
         }
 
 
@@ -103,12 +101,6 @@ public class MainSceneManager : MonoBehaviour
             fishesId = Choose();
             Debug.Log(fishesId);
         }
-    }
-
-    void Catch(int hitNum)
-    {
-        GameObject prefab = (GameObject)Resources.Load("Prefabs/Catch/" + fishes[hitNum]);
-        Instantiate(prefab, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity); //辞書からhitNumに対応したプレハブを生成する
     }
 
     void InitializeDicts()

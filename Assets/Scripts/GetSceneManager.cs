@@ -7,12 +7,14 @@ public class GetSceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Catch(MainSceneManager.fishesId);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    void Catch(int hitNum)
     {
-        
+        GameObject prefab = (GameObject)Resources.Load("Prefabs/Catch/" + MainSceneManager.fishes[hitNum]);
+        Instantiate(prefab, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity); //辞書からhitNumに対応したプレハブを生成する
     }
+
 }
